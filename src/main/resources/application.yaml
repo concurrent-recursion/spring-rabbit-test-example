@@ -1,0 +1,4 @@
+spring:
+  application:
+    name: JunitStuff
+#Assuming a local instance of Rabbit is running. Use docker-compose.yaml to start an instance
