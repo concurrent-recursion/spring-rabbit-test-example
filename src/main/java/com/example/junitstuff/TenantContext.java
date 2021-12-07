@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 
 @Slf4j
 public class TenantContext {
-    private static final ThreadLocal<String> currentTenant  = new ThreadLocal<>();
+    private static final ThreadLocal<String> currentTenant = new ThreadLocal<>();
 
     public String getTenantId() {
         return currentTenant.get();
@@ -15,11 +15,11 @@ public class TenantContext {
 
     public void setTenantId(@NonNull String tenantId) {
         Assert.notNull(tenantId, "TenantId cannot be null");
-        log.trace("Setting TenantId to '{}'",tenantId);
+        log.trace("Setting TenantId to '{}'", tenantId);
         currentTenant.set(tenantId);
     }
 
-    public void clear(){
+    public void clear() {
         log.trace("Clearing TenantContext");
         currentTenant.remove();
     }

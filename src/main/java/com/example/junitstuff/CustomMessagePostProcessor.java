@@ -12,7 +12,7 @@ import static com.example.junitstuff.RabbitConfiguration.TENANT_HEADER;
 public class CustomMessagePostProcessor implements MessagePostProcessor {
 
     private final TenantContext tenantContext = new TenantContext();
-    
+
     @Override
     public Message postProcessMessage(Message message) {
         log.trace("CustomMessagePostProcessor.postProcessMessage [{}]", message.getMessageProperties());
@@ -28,7 +28,7 @@ public class CustomMessagePostProcessor implements MessagePostProcessor {
     private Message setupProperties(Message message) {
         MessageProperties messageProperties = message.getMessageProperties();
         //Put custom header in with the current tenant context
-        messageProperties.getHeaders().put(TENANT_HEADER,tenantContext.getTenantId());
+        messageProperties.getHeaders().put(TENANT_HEADER, tenantContext.getTenantId());
         return message;
     }
 }
