@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static com.example.junitstuff.RabbitConfiguration.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -26,9 +27,8 @@ import static org.mockito.Mockito.verify;
 @SpringRabbitTest
 @SpringJUnitConfig
 @ContextConfiguration(classes = {TestConfig.class, RabbitConfiguration.class})
-@EnableRabbit
 class RabbitTests {
-    private TenantContext tenantContext = new TenantContext();
+    private final TenantContext tenantContext = new TenantContext();
 
     @Autowired
     private RabbitListenerTestHarness harness;
@@ -36,18 +36,18 @@ class RabbitTests {
     @Autowired
     private TestRabbitTemplate template;
 
-
     @Test
     void test(){
-        Thing t = new Thing(UUID.randomUUID(),"Luigi", ZonedDateTime.now());
+        Thing t = new Thing(UUID.randomUUID(),"Arc Reactor", ZonedDateTime.now());
+        final String tenant = "STARK";
         log.info("Sending message, Exchange:{}, Routing Key:{}, Object:{}",EXCHANGE_NAME,ROUTING_KEY,t);
         try {
-            tenantContext.setTenantId("ACME");
+            tenantContext.setTenantId(tenant);
             template.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, t);
         }finally {
             tenantContext.clear();
         }
         ThingListener thingListener = harness.getSpy(LISTENER_ID);
-        verify(thingListener).receiveWidget("ACME",t);
+        verify(thingListener).receiveWidget(eq(tenant),t);
     }
 }

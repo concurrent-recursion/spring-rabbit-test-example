@@ -1,15 +1,10 @@
 package com.example.junitstuff;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Correlation;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
-import java.util.Map;
 
 import static com.example.junitstuff.RabbitConfiguration.TENANT_HEADER;
 
@@ -32,9 +27,8 @@ public class CustomMessagePostProcessor implements MessagePostProcessor {
 
     private Message setupProperties(Message message) {
         MessageProperties messageProperties = message.getMessageProperties();
-        messageProperties.setTimestamp(new Date());
-        Map<String, Object> headers = messageProperties.getHeaders();
-        headers.put(TENANT_HEADER,tenantContext.getTenantId());
+        //Put custom header in with the current tenant context
+        messageProperties.getHeaders().put(TENANT_HEADER,tenantContext.getTenantId());
         return message;
     }
 }

@@ -25,6 +25,6 @@ public class ThingListener {
         )
     )
     public void receiveWidget(@Header(TENANT_HEADER) String tenantId, Thing thing){
-        log.info("Thing Received! Tenant:{}, Thing:{}",tenantId,thing);
+        log.info("Thing Received! Tenant:'{}' Thing= {}",tenantId,thing);
     }
 }

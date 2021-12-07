@@ -19,20 +19,21 @@ import static com.example.junitstuff.RabbitConfiguration.ROUTING_KEY;
 @Slf4j
 @SpringBootApplication
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class JunitStuffApplication implements CommandLineRunner, ExitCodeGenerator {
+public class MainApplication implements CommandLineRunner, ExitCodeGenerator {
     private int exitCode = 0;
 
     private final RabbitTemplate template;
-    private final TenantContext tenantContext;
+    private final TenantContext tenantContext = new TenantContext();
 
     public static void main(String[] args) {
-        SpringApplication.exit(SpringApplication.run(JunitStuffApplication.class, args));
+        SpringApplication.exit(SpringApplication.run(MainApplication.class, args));
     }
 
     @Override
     public void run(String... args)  {
         try {
             log.info("Sending Messages");
+            //Send messages with different tenants just as a proof-of-concept
             Thing thingy = new Thing(UUID.randomUUID(), "Acme Thing", ZonedDateTime.now());
             try {
                 tenantContext.setTenantId("ACME");
@@ -55,7 +56,6 @@ public class JunitStuffApplication implements CommandLineRunner, ExitCodeGenerat
             }finally {
                 tenantContext.clear();
             }
-
             Thread.sleep(5000);
         }catch(InterruptedException ie) {
             log.error("Thread interrupted",ie);
