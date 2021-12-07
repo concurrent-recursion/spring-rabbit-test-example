@@ -8,7 +8,9 @@ import org.springframework.amqp.rabbit.test.TestRabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import static com.example.junitstuff.RabbitConfiguration.*;
@@ -32,16 +34,16 @@ class RabbitTests {
 
     @Test
     void test() {
-        Thing t = new Thing(UUID.randomUUID(), "Arc Reactor", ZonedDateTime.now());
+        Thing t = new Thing(UUID.randomUUID(), "Arc Reactor", ZonedDateTime.now(ZoneId.of("UTC")));
         final String tenant = "STARK";
         log.info("Sending message, Exchange:{}, Routing Key:{}, Object:{}", EXCHANGE_NAME, ROUTING_KEY, t);
         try {
             tenantContext.setTenantId(tenant);
-            template.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, t);
+            template.convertAndSend(EXCHANGE_NAME, QUEUE_NAME, t);
         } finally {
             tenantContext.clear();
         }
         ThingListener thingListener = harness.getSpy(LISTENER_ID);
-        verify(thingListener).receiveWidget(eq(tenant), t);
+        verify(thingListener).receiveWidget(tenant, t);
     }
 }

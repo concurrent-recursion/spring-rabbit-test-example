@@ -1,7 +1,7 @@
 package com.example.junitstuff;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -25,6 +25,21 @@ public class RabbitConfiguration {
         rabbitTemplate.setMessageConverter(amqpMessageConverter);
         rabbitTemplate.setBeforePublishPostProcessors(amqpMessageWrapper);
         return rabbitTemplate;
+    }
+
+    @Bean
+    Queue queue() {
+        return new Queue(QUEUE_NAME, true);
+    }
+
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange(EXCHANGE_NAME,true,false);
+    }
+
+    @Bean
+    Binding binding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
 

@@ -16,14 +16,14 @@ public class ThingListener {
         log.info("Constructor for Thing Listener");
     }
 
-    //@RabbitListener(id=LISTENER_ID,queues = {QUEUE_NAME})
-    @RabbitListener(id = LISTENER_ID,
+    @RabbitListener(id=LISTENER_ID,queues = {QUEUE_NAME})
+    /*@RabbitListener(id = LISTENER_ID,
             bindings = @QueueBinding(
                     value = @Queue(QUEUE_NAME),
                     exchange = @Exchange(EXCHANGE_NAME),
                     key = ROUTING_KEY
             )
-    )
+    )*/
     public void receiveWidget(@Header(TENANT_HEADER) String tenantId, Thing thing) {
         log.info("Thing Received! Tenant:'{}' Thing= {}", tenantId, thing);
     }
