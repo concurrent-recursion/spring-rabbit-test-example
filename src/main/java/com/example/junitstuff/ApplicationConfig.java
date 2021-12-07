@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
+/**
+ * The Beans exposed here will be pulled into JUnit tests
+ */
 @Slf4j
 @Configuration
 public class ApplicationConfig {

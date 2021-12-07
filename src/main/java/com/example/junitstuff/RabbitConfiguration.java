@@ -8,6 +8,10 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ * Only declare things here that shouldn't be contained in the TestConfiguration
+ */
 @Slf4j
 @Configuration
 public class RabbitConfiguration {
